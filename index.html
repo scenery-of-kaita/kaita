@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ちいさなまちの物語。頴田</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500&family=Shippori+Mincho:wght@400;500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #1a1714;
+    --paper: #f0ebe3;
+    --muted: #8c7f72;
+    --accent: #4a3f35;
+    --line: rgba(74,63,53,0.2);
+    --gold: #a08c6e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+  }
+
+  .hero-en {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: clamp(0.7rem, 2vw, 0.85rem);
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(2.2rem, 8vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.6s forwards;
+  }
+
+  .hero-title span {
+    display: block;
+    font-size: clamp(1.1rem, 4vw, 2rem);
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    letter-spacing: 0.2em;
+  }
+
+  .hero-sub {
+    margin-top: 2.5rem;
+    font-size: clamp(0.75rem, 2vw, 0.85rem);
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-label {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* ── ABOUT ── */
+  .about-text {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(1rem, 3vw, 1.15rem);
+    line-height: 2.2;
+    color: var(--accent);
+  }
+
+  .about-text p + p {
+    margin-top: 1.8rem;
+  }
+
+  .about-text em {
+    font-style: normal;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1px;
+    background: var(--line);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0.55rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    transform: translateX(-2px);
+  }
+
+  .timeline-era {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.3rem;
+  }
+
+  .timeline-text {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 0.95rem;
+    color: var(--accent);
+    line-height: 1.9;
+  }
+
+  /* ── SPOTS ── */
+  .spots-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .spot-card {
+    border: 1px solid var(--line);
+    padding: 1.5rem;
+    position: relative;
+    transition: border-color 0.3s ease;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
+  .spot-card:hover {
+    border-color: var(--gold);
+  }
+
+  .spot-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 0;
+    background: var(--gold);
+    transition: height 0.3s ease;
+  }
+
+  .spot-card:hover::before { height: 100%; }
+
+  .spot-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+
+  .spot-name-en {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.6rem;
+  }
+
+  .spot-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .spot-tag {
+    display: inline-block;
+    margin-top: 0.8rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    border: 1px solid var(--line);
+    padding: 0.2rem 0.6rem;
+  }
+
+  /* ── PROJECTS ── */
+  .project-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .project-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--accent);
+    font-family: 'Shippori Mincho', serif;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+    gap: 1rem;
+  }
+
+  .project-link:hover { color: var(--ink); }
+
+  .project-link-arrow {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* ── INSTAGRAM ── */
+  .instagram-section {
+    text-align: center;
+    padding-bottom: 8rem;
+  }
+
+  .insta-handle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    color: var(--ink);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .insta-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.9rem 2.5rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .btn:hover {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--line);
+    text-align: center;
+    padding: 2.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    max-width: 680px;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-en">Fukuoka, Japan &nbsp;·&nbsp; former Kaita Town</p>
+  <h1 class="hero-title">
+    頴田
+    <span>ちいさなまちの物語。</span>
+  </h1>
+  <p class="hero-sub">scenery of kaita</p>
+</div>
+
+<!-- ABOUT -->
+<section class="reveal">
+  <p class="section-label">About Kaita</p>
+  <div class="about-text">
+    <p>
+      <em>かいた</em>、という町があった。
+    </p>
+    <p>
+      福岡県の中央部、筑豊の山あいに位置するちいさな町。
+      古代の石垣が丘に眠り、炭鉱の記憶が土に染みている。
+    </p>
+    <p>
+      2006年、頴田町という名前は地図から消えた。
+      飯塚市に合併され、行政区画としては存在しない。
+      それでも、社は建ち、石は並び、季節は変わりつづけている。
+    </p>
+    <p>
+      これは、そのちいさなまちの記録。
+    </p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TIMELINE -->
+<section class="reveal">
+  <p class="section-label">History</p>
+  <div class="timeline">
+    <div class="timeline-item">
+      <p class="timeline-era">7th century &nbsp;古代</p>
+      <p class="timeline-text">
+        鹿毛馬の丘に、石が並べられた。約1,800個の花崗岩。
+        誰が、なんのために積んだのか——今もわからない。
+      </p>
+    </div>
+    <div class="timeline-item">
+      <p class="timeline-era">Meiji – Showa &nbsp;近代</p>
+      <p class="timeline-text">
+        筑豊炭田の時代。頴田にも炭鉱が開き、
+        日本の近代化を支えた。やがて閉山し、まちは静かになった。
+      </p>
+    </div>
+    <div class="timeline-item">
+      <p class="timeline-era">2006 &nbsp;合併</p>
+      <p class="timeline-text">
+        嘉穂郡頴田町は飯塚市へ編入。「頴田町」という名が消えた。
+        残ったのは、風景と、記憶と、ここで生きる人々。
+      </p>
+    </div>
+    <div class="timeline-item">
+      <p class="timeline-era">Now &nbsp;現在</p>
+      <p class="timeline-text">
+        旧頴田町として、その土地は静かに息をしている。
+      </p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SPOTS -->
+<section class="reveal">
+  <p class="section-label">Places</p>
+  <div class="spots-grid">
+
+    <a class="spot-card" href="#" target="_blank">
+      <p class="spot-name-en">Kakenouma Kougoishi</p>
+      <p class="spot-name">鹿毛馬神籠石</p>
+      <p class="spot-desc">7世紀築造の古代山城。国指定史跡。約2kmにわたる列石が今も丘陵を巡る。</p>
+      <span class="spot-tag">国指定史跡</span>
+    </a>
+
+    <a class="spot-card" href="#" target="_blank">
+      <p class="spot-name-en">Iwakura</p>
+      <p class="spot-name">磐座</p>
+      <p class="spot-desc">人々が祈りを捧げてきた神聖な岩。古代信仰の面影を今に伝える。</p>
+      <span class="spot-tag">信仰遺跡</span>
+    </a>
+
+    <a class="spot-card" href="#" target="_blank">
+      <p class="spot-name-en">Taga Shrine</p>
+      <p class="spot-name">多賀神社</p>
+      <p class="spot-desc">頴田の里に静かに建つ社。長寿と縁結びの神を祀る。</p>
+      <span class="spot-tag">神社</span>
+    </a>
+
+    <a class="spot-card" href="#" target="_blank">
+      <p class="spot-name-en">Itsukushima Shrine</p>
+      <p class="spot-name">厳島神社</p>
+      <p class="spot-desc">水の神を祀る社。頴田の水辺の記憶とともにある。</p>
+      <span class="spot-tag">神社</span>
+    </a>
+
+    <a class="spot-card" href="#" target="_blank">
+      <p class="spot-name-en">Kifune Shrine</p>
+      <p class="spot-name">貴船神社</p>
+      <p class="spot-desc">水を司る神の社。うっそうとした木々に包まれた境内。</p>
+      <span class="spot-tag">神社</span>
+    </a>
+
+    <a class="spot-card" href="#" target="_blank">
+      <p class="spot-name-en">Maruyama Park</p>
+      <p class="spot-name">丸山公園</p>
+      <p class="spot-desc">まちの人々の日常に寄り添う、ちいさな公園。</p>
+      <span class="spot-tag">公園</span>
+    </a>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROJECTS -->
+<section class="reveal">
+  <p class="section-label">Projects &amp; Links</p>
+  <div class="project-list">
+    <a class="project-link" href="https://www.city.iizuka.lg.jp/rekishi/" target="_blank">
+      <span>飯塚市歴史資料館</span>
+      <span class="project-link-arrow">→</span>
+    </a>
+    <a class="project-link" href="https://www.city.iizuka.lg.jp/machizukuri/kurashi/shimin/kaita/kaitamachikyo.html" target="_blank">
+      <span>頴田まちづくり協議会</span>
+      <span class="project-link-arrow">→</span>
+    </a>
+    <a class="project-link" href="https://kankou-iizuka.jp/" target="_blank">
+      <span>飯塚市観光ポータル</span>
+      <span class="project-link-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- INSTAGRAM -->
+<section class="instagram-section reveal">
+  <p class="section-label" style="justify-content:center;">Instagram</p>
+  <span class="insta-handle">@scenery_of_kaita</span>
+  <p class="insta-desc">ちいさなまちの風景を、記録しています。</p>
+  <a class="btn" href="https://www.instagram.com/scenery_of_kaita" target="_blank">Instagram を見る</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  scenery of kaita &nbsp;·&nbsp; Iizuka, Fukuoka &nbsp;·&nbsp; former Kaita Town
+</footer>
+
+<script>
+  // scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
